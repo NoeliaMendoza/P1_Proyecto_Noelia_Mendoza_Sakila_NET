@@ -1,0 +1,25 @@
+@model SakilaApp.Models.Store
+@{
+    ViewData["Title"] = "Editar tienda";
+}
+
+<h1>Editar tienda #@Model.StoreId</h1>
+<form asp-action="Edit">
+    <input type="hidden" asp-for="StoreId" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="mb-3">
+        <label asp-for="ManagerStaffId" class="form-label">ID Manager</label>
+        <input asp-for="ManagerStaffId" class="form-control" type="number" min="1" />
+        <span asp-validation-for="ManagerStaffId" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="AddressId" class="form-label">ID Dirección</label>
+        <input asp-for="AddressId" class="form-control" type="number" min="1" />
+        <span asp-validation-for="AddressId" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-warning">Actualizar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

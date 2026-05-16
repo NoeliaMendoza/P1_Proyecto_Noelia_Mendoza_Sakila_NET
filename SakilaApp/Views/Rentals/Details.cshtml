@@ -1,0 +1,21 @@
+﻿@model SakilaApp.Models.Rental
+@{
+ ViewData["Title"] = "Detalles del alquiler";
+}
+<h1>Detalles del alquiler</h1>
+<dl class="row">
+ <dt class="col-sm-3">ID</dt>
+ <dd class="col-sm-9">@Model.RentalId</dd>
+ <dt class="col-sm-3">Fecha alquiler</dt>
+ <dd class="col-sm-9">@Model.RentalDate</dd>
+ <dt class="col-sm-3">Inventario ID</dt>
+ <dd class="col-sm-9">@Model.InventoryId</dd>
+ <dt class="col-sm-3">Cliente ID</dt>
+ <dd class="col-sm-9">@Model.CustomerId</dd>
+ <dt class="col-sm-3">Fecha devolución</dt>
+ <dd class="col-sm-9">@(Model.ReturnDate?.ToString() ?? "No devuelto")</dd>
+ <dt class="col-sm-3">Última actualización</dt>
+ <dd class="col-sm-9">@Model.LastUpdate</dd>
+</dl>
+<a asp-action="Edit" asp-route-id="@Model.RentalId" class="btn btnwarning">Editar</a>
+<a asp-action="Index" class="btn btn-secondary">Volver</a>

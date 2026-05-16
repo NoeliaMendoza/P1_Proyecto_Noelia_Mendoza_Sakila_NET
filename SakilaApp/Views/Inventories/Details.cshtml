@@ -1,0 +1,17 @@
+﻿@model SakilaApp.Models.Inventory
+@{
+    ViewData["Title"] = "Detalles del inventario";
+}
+<h1>Inventario #@Model.InventoryId</h1>
+<dl class="row">
+    <dt class="col-sm-3">ID</dt>
+    <dd class="col-sm-9">@Model.InventoryId</dd>
+    <dt class="col-sm-3">Película ID</dt>
+    <dd class="col-sm-9">@Model.FilmId</dd>
+    <dt class="col-sm-3">Tienda ID</dt>
+    <dd class="col-sm-9">@Model.StoreId</dd>
+    <dt class="col-sm-3">Última actualización</dt>
+    <dd class="col-sm-9">@Model.LastUpdate</dd>
+</dl>
+<a asp-action="Edit" asp-route-id="@Model.InventoryId" class="btn btnwarning">Editar</a>
+<a asp-action="Index" class="btn btn-secondary">Volver</a>

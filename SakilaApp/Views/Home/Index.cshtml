@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center mb-4">
+    <h1 class="display-4 fw-bold mt-3">Bienvenido a SakilaApp</h1>
+    <p class="lead text-muted">Sistema de gestión de videotienda</p>
+</div>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <!-- Tarjetas de estadísticas -->
+    <div class="row g-4 justify-content-center mb-5">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center p-4 h-100 bg-secondary">
+                <div class="fs-1 text-white"><i class="bi bi-camera-video-fill"></i></div>
+                <div class="display-5 fw-bold mt-2 text-white">@(ViewData["FilmCount"] ?? 0)</div>
+                <p class="mb-0 text-white">Películas activas</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center p-4 h-100 bg-secondary">
+                <div class="fs-1 text-white"><i class="bi bi-people-fill"></i></div>
+                <div class="display-5 fw-bold mt-2 text-white">@(ViewData["CustomerCount"] ?? 0)</div>
+                <p class="mb-0 text-white">Clientes registrados</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm text-center p-4 h-100 bg-secondary">
+                <div class="fs-1 text-white"><i class="bi bi-clipboard-check-fill"></i></div>
+                <div class="display-5 fw-bold mt-2 text-white">@(ViewData["RentalCount"] ?? 0)</div>
+                <p class="mb-0 text-white">Alquileres activos</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Módulos de navegación -->
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+            <a href="/Films" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 text-center p-4 hover-card">
+                    <div class="fs-1 text-dark"><i class="bi bi-camera-video"></i></div>
+                    <h4 class="mt-2">Películas</h4>
+                    <p class="text-muted small">Gestiona el catálogo de películas</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Actors" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 text-center p-4">
+                    <div class="fs-1 text-dark"><i class="bi bi-person-badge"></i></div>
+                    <h4 class="mt-2">Actores</h4>
+                    <p class="text-muted small">Consulta y administra actores</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Categories" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 text-center p-4">
+                    <div class="fs-1 text-dark"><i class="bi bi-tag"></i></div>
+                    <h4 class="mt-2">Categorías</h4>
+                    <p class="text-muted small">Organiza las categorías de películas</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Customers" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 text-center p-4">
+                    <div class="fs-1 text-dark"><i class="bi bi-people"></i></div>
+                    <h4 class="mt-2">Clientes</h4>
+                    <p class="text-muted small">Administra los clientes registrados</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Rentals" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 text-center p-4">
+                    <div class="fs-1 text-dark"><i class="bi bi-clipboard-check"></i></div>
+                    <h4 class="mt-2">Alquileres</h4>
+                    <p class="text-muted small">Controla los alquileres activos</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Stores" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 text-center p-4">
+                    <div class="fs-1 text-dark"><i class="bi bi-shop"></i></div>
+                    <h4 class="mt-2">Tiendas</h4>
+                    <p class="text-muted small">Gestiona las sucursales</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="/Inventories" class="text-decoration-none">
+                <div class="card h-100 shadow-sm border-0 text-center p-4">
+                    <div class="fs-1 text-dark"><i class="bi bi-box-seam"></i></div>
+                    <h4 class="mt-2">Inventarios</h4>
+                    <p class="text-muted small">Revisa el inventario disponible</p>
+                </div>
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <div class="text-center mt-4">
+        <p class="text-muted mb-4">Inicia sesión para acceder al sistema</p>
+        <a href="/Account/Login" class="btn btn-dark btn-lg me-2">
+            Iniciar sesión
+        </a>
+        <a href="/Account/Register" class="btn btn-outline-dark btn-lg">
+            <i class="bi bi-person-plus me-1"></i> Registrarse
+        </a>
+    </div>
+}

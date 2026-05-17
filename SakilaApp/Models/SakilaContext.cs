@@ -74,6 +74,12 @@ public class SakilaContext : IdentityDbContext
             entity.Property(e => e.FirstName).HasColumnName("first_name").HasColumnType("varchar(45)");
             entity.Property(e => e.LastName).HasColumnName("last_name").HasColumnType("varchar(45)");
             entity.Property(e => e.Email).HasColumnName("email").HasColumnType("varchar(50)");
+            entity.Property(e => e.StoreId).HasColumnName("store_id");
+            entity.HasOne(c => c.Store)
+                  .WithMany(s => s.Customers)
+                  .HasForeignKey(c => c.StoreId)
+                  .HasConstraintName("FK_customer_store");
+            entity.Property(e => e.AddressId).HasColumnName("address_id");
             entity.Property(e => e.Active).HasColumnName("active").HasColumnType("tinyint").HasDefaultValue((byte)1);
             entity.Property(e => e.CreateDate).HasColumnName("create_date").HasColumnType("datetime");
             entity.Property(e => e.LastUpdate).HasColumnName("last_update").HasColumnType("datetime");
@@ -86,6 +92,7 @@ public class SakilaContext : IdentityDbContext
             entity.Property(e => e.RentalDate).HasColumnName("rental_date").HasColumnType("datetime");
             entity.Property(e => e.InventoryId).HasColumnName("inventory_id");
             entity.Property(e => e.CustomerId).HasColumnName("customer_id");
+            entity.Property(e => e.StaffId).HasColumnName("staff_id");
             entity.Property(e => e.ReturnDate).HasColumnName("return_date").HasColumnType("datetime");
             entity.Property(e => e.LastUpdate).HasColumnName("last_update").HasColumnType("datetime");
             entity.Property(e => e.Active).HasColumnName("active").HasColumnType("tinyint").HasDefaultValue((byte)1);

@@ -6,7 +6,7 @@ using static System.Collections.Specialized.BitVector32;
 var builder = WebApplication.CreateBuilder(args);
 // Agregar servicios MVC
 builder.Services.AddControllersWithViews();
-// Agregar servicios de Razor Pages (necesario para MapRazorPages)
+// Agregar servicios de Razor Pages 
 builder.Services.AddRazorPages();
 // Configurar DbContext con SQL Server
 builder.Services.AddDbContext<SakilaContext>(options =>
@@ -31,6 +31,7 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.LogoutPath = "/Account/Logout";
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
+
 // Registrar servicio de email
 builder.Services.AddTransient<IEmailSender, ConsoleEmailSender>();
 var app = builder.Build();

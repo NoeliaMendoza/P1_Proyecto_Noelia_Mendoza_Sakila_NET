@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SakilaApp.Models;
 
@@ -40,13 +41,41 @@ public class CustomersController : Controller
     }
 
     [HttpGet]
-    public IActionResult Create() => View();
+    public async Task<IActionResult> Create()
+    {
+        var stores = await _context.Stores.Where(s => s.Active == 1).OrderBy(s => s.StoreId).ToListAsync();
+        var defaultStoreId = stores.Count > 0 ? stores[0].StoreId : 0;
+        ViewBag.Stores = new SelectList(stores.Select(s => new { s.StoreId, s.DisplayName }), "StoreId", "DisplayName", defaultStoreId);
+        var model = new Customer { StoreId = defaultStoreId };
+        if (defaultStoreId > 0)
+        {
+            var addr = stores[0].AddressId;
+            model.AddressId = addr;
+        }
+        return View(model);
+    }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(Customer customer)
     {
-        if (!ModelState.IsValid) return View(customer);
+        if (!ModelState.IsValid)
+        {
+            var stores = await _context.Stores.Where(s => s.Active == 1).OrderBy(s => s.StoreId).ToListAsync();
+            ViewBag.Stores = new SelectList(stores.Select(s => new { s.StoreId, s.DisplayName }), "StoreId", "DisplayName", customer.StoreId);
+            return View(customer);
+        }
+
+        var firstStoreId = await _context.Stores.Where(s => s.Active == 1).OrderBy(s => s.StoreId).Select(s => s.StoreId).FirstOrDefaultAsync();
+        if (customer.StoreId == 0 && firstStoreId > 0) customer.StoreId = firstStoreId;
+
+        // asignar AddressId según la tienda seleccionada
+        if (customer.StoreId > 0)
+        {
+            var storeAddressId = await _context.Stores.Where(s => s.StoreId == customer.StoreId).Select(s => s.AddressId).FirstOrDefaultAsync();
+            if (storeAddressId > 0) customer.AddressId = storeAddressId;
+        }
+
         customer.CreateDate = DateTime.Now;
         customer.LastUpdate = DateTime.Now;
         customer.Active = 1;
@@ -61,6 +90,14 @@ public class CustomersController : Controller
     {
         var customer = await _context.Customers.FindAsync(id);
         if (customer == null || customer.Active != 1) return NotFound();
+        var stores = await _context.Stores.Where(s => s.Active == 1).OrderBy(s => s.StoreId).ToListAsync();
+        ViewBag.Stores = new SelectList(stores.Select(s => new { s.StoreId, s.DisplayName }), "StoreId", "DisplayName", customer.StoreId);
+        // asegurar AddressId sincronizada con la tienda
+        if (customer.StoreId > 0)
+        {
+            var storeAddressId = stores.FirstOrDefault(s => s.StoreId == customer.StoreId)?.AddressId ?? 0;
+            customer.AddressId = storeAddressId;
+        }
         return View(customer);
     }
 
@@ -69,7 +106,19 @@ public class CustomersController : Controller
     public async Task<IActionResult> Edit(int id, Customer customer)
     {
         if (id != customer.CustomerId) return BadRequest();
-        if (!ModelState.IsValid) return View(customer);
+        if (!ModelState.IsValid)
+        {
+            var stores = await _context.Stores.Where(s => s.Active == 1).OrderBy(s => s.StoreId).ToListAsync();
+            ViewBag.Stores = new SelectList(stores.Select(s => new { s.StoreId, s.DisplayName }), "StoreId", "DisplayName", customer.StoreId);
+            return View(customer);
+        }
+        // asegurar AddressId según la tienda seleccionada
+        if (customer.StoreId > 0)
+        {
+            var storeAddressId = await _context.Stores.Where(s => s.StoreId == customer.StoreId).Select(s => s.AddressId).FirstOrDefaultAsync();
+            if (storeAddressId > 0) customer.AddressId = storeAddressId;
+        }
+
         customer.LastUpdate = DateTime.Now;
         _context.Customers.Update(customer);
         await _context.SaveChangesAsync();

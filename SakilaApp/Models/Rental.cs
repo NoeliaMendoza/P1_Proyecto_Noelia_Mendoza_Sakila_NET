@@ -7,6 +7,7 @@ public class Rental
     public DateTime RentalDate { get; set; }
     public int InventoryId { get; set; }
     public int CustomerId { get; set; }
+    public int StaffId { get; set; } = 1;
     public DateTime? ReturnDate { get; set; }
     public DateTime LastUpdate { get; set; }
     public byte Active { get; set; } = 1;

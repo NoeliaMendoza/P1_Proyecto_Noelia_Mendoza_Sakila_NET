@@ -48,6 +48,18 @@ public class RentalsController : Controller
     public async Task<IActionResult> Create(Rental rental)
     {
         if (!ModelState.IsValid) return View(rental);
+
+        // si no se ha proporcionado StaffId, intentar obtenerlo a partir del inventario -> tienda -> manager
+        if (rental.StaffId == 0)
+        {
+            var storeManagerId = await (from inv in _context.Inventories
+                                        join st in _context.Stores on inv.StoreId equals st.StoreId
+                                        where inv.InventoryId == rental.InventoryId
+                                        select st.ManagerStaffId).FirstOrDefaultAsync();
+            if (storeManagerId > 0) rental.StaffId = storeManagerId;
+            else rental.StaffId = 1; // fallback
+        }
+
         rental.LastUpdate = DateTime.Now;
         rental.Active = 1;
         _context.Rentals.Add(rental);
@@ -70,6 +82,17 @@ public class RentalsController : Controller
     {
         if (id != rental.RentalId) return BadRequest();
         if (!ModelState.IsValid) return View(rental);
+        // asegurar StaffId según inventario seleccionado
+        if (rental.StaffId == 0)
+        {
+            var storeManagerId = await (from inv in _context.Inventories
+                                        join st in _context.Stores on inv.StoreId equals st.StoreId
+                                        where inv.InventoryId == rental.InventoryId
+                                        select st.ManagerStaffId).FirstOrDefaultAsync();
+            if (storeManagerId > 0) rental.StaffId = storeManagerId;
+            else rental.StaffId = 1;
+        }
+
         rental.LastUpdate = DateTime.Now;
         _context.Rentals.Update(rental);
         await _context.SaveChangesAsync();

@@ -22,6 +22,14 @@
         <input asp-for="Email" class="form-control" type="email" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
+    <div class="mb-3">
+        <label asp-for="StoreId" class="form-label">Tienda</label>
+        <select asp-for="StoreId" class="form-select" asp-items="ViewBag.Stores">
+            <option value="">Seleccione una tienda</option>
+        </select>
+        <span asp-validation-for="StoreId" class="text-danger"></span>
+    </div>
+    <input type="hidden" asp-for="AddressId" />
     <div class="mb-3 form-check">
         <input type="checkbox" class="form-check-input" id="activeCheck"
                name="Active" value="1" @(Model.Active == 1 ? "checked" : "") />

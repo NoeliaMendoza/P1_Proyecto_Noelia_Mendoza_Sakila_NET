@@ -50,10 +50,35 @@ public class StoresController : Controller
     public async Task<IActionResult> Create(Store store)
     {
         if (!ModelState.IsValid) return View(store);
+
+        // comprobar que la dirección no esté ya asignada a otra tienda (índice único en BD)
+        if (store.AddressId <= 0)
+        {
+            ModelState.AddModelError("AddressId", "ID de dirección inválido.");
+            return View(store);
+        }
+        // el índice único en la BD impide duplicados independientemente de la columna Active,
+        // por eso comprobamos sin filtrar por Active.
+        var exists = await _context.Stores.AnyAsync(s => s.AddressId == store.AddressId);
+        if (exists)
+        {
+            ModelState.AddModelError("AddressId", "La dirección ya está asignada a otra tienda.");
+            return View(store);
+        }
+
         store.LastUpdate = DateTime.Now;
         store.Active = 1;
         _context.Stores.Add(store);
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            // posible condición de carrera u otro índice único
+            ModelState.AddModelError(string.Empty, "No se pudo crear la tienda: duplicado en la dirección.");
+            return View(store);
+        }
         TempData["Success"] = "Tienda creada";
         return RedirectToAction(nameof(Index));
     }

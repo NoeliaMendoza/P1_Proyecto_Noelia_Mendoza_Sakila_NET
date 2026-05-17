@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 namespace SakilaApp.Models;
 
 public class Store
@@ -15,4 +16,8 @@ public class Store
 
     public DateTime LastUpdate { get; set; }
     public byte Active { get; set; } = 1;
+    public ICollection<Customer>? Customers { get; set; }
+
+    [NotMapped]
+    public string DisplayName => $"Tienda {StoreId} - Dirección {AddressId}";
 }

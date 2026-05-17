@@ -21,6 +21,14 @@ public class Customer
     [Display(Name = "Correo electrónico")]
     public string Email { get; set; } = string.Empty;
 
+    [Display(Name = "ID Tienda")]
+    public int StoreId { get; set; } = 1;
+
+    public Store? Store { get; set; }
+
+    [Display(Name = "ID Dirección")]
+    public int AddressId { get; set; } = 1;
+
     public byte Active { get; set; } = 1;
     public DateTime CreateDate { get; set; } = DateTime.Now;
     public DateTime LastUpdate { get; set; } = DateTime.Now;
